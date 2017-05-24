@@ -1,11 +1,12 @@
 -- $Id: gs.gpr 74 2017-04-27 09:56:00Z jpuente $
 --------------------------------------------------------------------------------
--- Toy GS project
+-- Toy GS project - GUI version
 -- Copyright (c) 2017 Juan Antonio de la Puente <jpuente@dit.upm.es>
 -- Permission to copy and modify are granted under the terms of
 -- the GNU General Public License (GPL).
 -- See http://www.gnu.org/licenses/licenses.html#GPL for the details
 --------------------------------------------------------------------------------
+with "gtkada";
 project GS is
 
    for Source_Dirs use ("src"); 

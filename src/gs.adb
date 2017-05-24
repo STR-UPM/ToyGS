@@ -9,13 +9,14 @@
 -- See http://www.gnu.org/licenses/licenses.html#GPL for the details
 ------------------------------------------------------------------------------
 with Parameters, GS_TM, GS_TC;
-with Ada.Command_Line;
-with GNAT.Sockets;
+with GUI;       use GUI;
+
+with Ada.Command_Line; use Ada.Command_Line;
+with GNAT.Sockets;     use GNAT.Sockets;
+with GNAT.OS_Lib;      use GNAT.OS_Lib;
 with System.IO;
 
 procedure GS is
-   use Ada.Command_Line;
-   use GNAT.Sockets;
 begin
    if Argument_Count >= 1 then
       Parameters.OBSW_IP := Inet_Addr(Argument(1));
@@ -27,8 +28,9 @@ begin
       Parameters.TM_Port := Port_Type(Integer'Value(Argument(3)));
    end if;
 
-   System.IO.Put_Line("--- GS started ---");
-
-   -- do nothing while application tasks run
+   System.IO.Put_Line("--- GS start ---");
+   GUI.Init;
+   System.IO.Put_Line("--- GS end ---");
+   OS_Abort;
 end GS;
 
