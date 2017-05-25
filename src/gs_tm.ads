@@ -8,26 +8,14 @@
 -- the GNU General Public License (GPL).
 -- See http://www.gnu.org/licenses/licenses.html#GPL for the details
 ------------------------------------------------------------------------------
-with Measurements;
-with Ada.Real_Time;
 
+-- Telemetry subsystem
 package GS_TM is
-   use Measurements, Ada.Real_Time;
 
+   -- Telemetry message type
    type TM_Type is (Basic, HK);
 
-   type TM_Message (Kind : TM_Type) is
-      record
-         Timestamp : Time;
-         case Kind is
-            when Basic =>
-               Data  : Measurement;
-            when HK =>
-               Data_Log  : HK_Data;
-               Length    : Positive;
-         end case;
-      end record;
+   -- Initialize TM sybsystem
+   procedure Init;
 
-private
-   task Receiver;
 end GS_TM;

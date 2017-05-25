@@ -8,8 +8,15 @@
 -- the GNU General Public License (GPL).
 -- See http://www.gnu.org/licenses/licenses.html#GPL for the details
 ------------------------------------------------------------------------------
+
+-- Graphic user interface
+--
 package GUI is
 
+   -- Init GUI and launch window
    procedure Init;
+
+   -- Put TM message on message are
+   procedure Put_TM (Message : String);
 
 end GUI;

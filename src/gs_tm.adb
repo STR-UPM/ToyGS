@@ -1,3 +1,4 @@
+------------------------------------------------------------------------------
 -- $Id: gs_tm.adb 90 2017-05-04 14:54:52Z jpuente $
 ------------------------------------------------------------------------------
 -- Project GS
@@ -7,41 +8,54 @@
 -- the GNU General Public License (GPL).
 -- See http://www.gnu.org/licenses/licenses.html#GPL for the details
 ------------------------------------------------------------------------------
-with Parameters, Measurements;
-with Ada.Real_Time;
+with Parameters;
+with Measurements; use Measurements;
+with GUI;
 
+with GNAT.Sockets; use GNAT.Sockets;
 with Ada.Streams;
-with GNAT.Sockets;
-
-with Ada.Exceptions;
 with Ada.Unchecked_Conversion;
 
 with System.IO;
+with Ada.Exceptions;
+with Ada.Real_Time;
+with Ada.Calendar;
+with GNAT.Calendar.Time_IO;
 
 package body GS_TM is
-   use Measurements;
+   use Ada.Real_Time;
 
-   --------------
-   -- Receiver --
-   --------------
+   ----------------------
+   -- Data definitions --
+   ----------------------
 
-   task body Receiver is
-      use GNAT.Sockets;
+   type TM_Message (Kind : TM_Type) is
+      record
+         Timestamp : Time;
+         case Kind is
+            when Basic =>
+               Data  : Measurement;
+            when HK =>
+               Data_Log  : HK_Data;
+               Length    : Positive;
+         end case;
+      end record;
 
-      Socket   : Socket_Type;
-      Address  : Sock_Addr_Type;
-      From     : Sock_Addr_Type;
+   Socket   : Socket_Type;
+   Address  : Sock_Addr_Type;
+   From     : Sock_Addr_Type;
 
-      subtype TM_Stream is
-        Ada.Streams.Stream_Element_Array (1..TM_Message'Size);
-      function To_TM_Message is new Ada.Unchecked_Conversion
-        (TM_Stream, TM_Message);
+   subtype TM_Stream is
+     Ada.Streams.Stream_Element_Array (1..TM_Message'Size);
+   function To_TM_Message is new Ada.Unchecked_Conversion
+     (TM_Stream, TM_Message);
 
-      Data    : TM_Stream;
-      Last    : Ada.Streams.Stream_Element_Offset;
+   ----------
+   -- Init --
+   ----------
 
+   procedure Init is
    begin
-      delay until Clock + Milliseconds(500);
       --  Create UDP socket
       Create_Socket (Socket, Family_Inet, Socket_Datagram);
 
@@ -52,12 +66,27 @@ package body GS_TM is
 
       Bind_Socket (Socket, Address);
 
-      System.IO.Put_Line(" ...listening on port " & Address.Port'Img);
+      Pragma Debug
+        (System.IO.Put_Line
+           ("... listening for TM on port " & Address.Port'Img));
+   end Init;
 
+   --------------
+   -- Receiver --
+   --------------
+
+   task Receiver;
+
+   task body Receiver is
+      Data    : TM_Stream;
+      Last    : Ada.Streams.Stream_Element_Offset;
+   begin
       loop
          begin
             Receive_Socket (Socket, Data, Last, From);
             declare
+               use Ada.Calendar, GNAT.Calendar.Time_IO;
+
                Message : TM_Message :=  To_TM_Message(Data);
                SC      : Seconds_Count;
                TS      : Time_Span;
@@ -67,17 +96,29 @@ package body GS_TM is
                when Basic =>
                   M := Message.Data;
                   Split(M.Timestamp, SC, TS);
-                  System.IO.Put_Line("TM " & SC'Img & " " & M.Value'Img);
+                  pragma Debug
+                    (System.IO.Put_Line(Image(Clock, "%T ") &
+                       "TM " & SC'Img & " " & M.Value'Img));
+                  GUI.Put_TM(Image(Clock, "%T ")
+                             & "TM " & SC'Img & " "
+                             & M.Value'Img);
                when HK =>
                   Split(Message.Timestamp, SC, TS);
-                  System.IO.Put_Line("TM "& SC'Img & "  HK log");
-                  System.IO.Put_Line("----------------------");
+                  pragma Debug
+                    (System.IO.Put_Line(Image(Clock, "%T ") &
+                       "TM "& SC'Img & "  HK log"));
+                  GUI.Put_TM(Image(Clock, "%T ")
+                             & "TM " & SC'Img & " "
+                             & "  HK log");
                   for i in 1..Message.Length loop
                      M := Message.Data_Log(i);
                      Split(M.Timestamp, SC, TS);
-                     System.IO.Put_Line("   " & SC'Img & " " & M.Value'Img);
+                     pragma Debug
+                       (System.IO.Put_Line("            "
+                        & SC'Img & " " & M.Value'Img));
+                     GUI.Put_TM("            "
+                                & SC'Img & " " & M.Value'Img);
                   end loop;
-                  System.IO.Put_Line("----------------------");
                end case;
             end;
          exception
