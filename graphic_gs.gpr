@@ -1,18 +1,15 @@
 
 --  Project file for the graphic (gtk-based) version of the toy ground station
 
+with "shared.gpr";
 with "gtkada.gpr";
-with "../shared/shared.gpr";
 
 project Graphic_GS is
 
-   type Build_Kind is
-      ("static", "relocatable");
-   for Source_Dirs use ("src");
+   for Source_Dirs use ("graphic/src");
    for Object_Dir use "obj";
+   for Exec_Dir use ".";
    for Main use ("gs.adb");
-
-   LIBRARY_TYPE : Build_Kind := external ("LIBRARY_TYPE", "relocatable");
 
    package Builder is
       for Global_Configuration_Pragmas use "gnat.adc";
@@ -20,16 +17,7 @@ project Graphic_GS is
    end Builder;
 
    package Compiler is
-
-      case LIBRARY_TYPE is
-
-         when "static" =>
-            for Default_Switches ("ada") use ("-g", "-gnat12", "-O", "-gnata");
-
-         when "relocatable" =>
-            for Default_Switches ("ada") use ("-g", "-gnat12", "-gnata");
-      end case;
-
+      for Default_Switches ("ada") use ("-g", "-gnat12", "-gnata");
    end Compiler;
 
 end Graphic_GS;
