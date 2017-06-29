@@ -1,21 +1,23 @@
 ------------------------------------------------------------------------------
--- $Id: gs_tm.ads 86 2017-05-04 14:09:17Z jpuente $
+-- $Id: gs_relay_tc.ads 99 2017-05-25 14:12:55Z jpuente $
 ------------------------------------------------------------------------------
--- Project GS
--- GS_TM specification
+-- Project GS - toy ground station
+-- GS- relay TC spec
 -- Copyright (c) 2017 Juan Antonio de la Puente <jpuente@dit.upm.es>
 -- Permission to copy and modify are granted under the terms of
 -- the GNU General Public License (GPL).
 -- See http://www.gnu.org/licenses/licenses.html#GPL for the details
 ------------------------------------------------------------------------------
+with GNAT.Sockets;     use GNAT.Sockets;
+with Ada.Streams;
 
--- Telemetry subsystem
-package GS_TM is
+with System.IO;
+with Ada.Exceptions;
 
-   -- Telemetry message type
-   type TM_Type is (Basic, HK);
+-- Relay TC packets
+--
+package GS_Relay_TC is
 
-   -- Initialize TM sybsystem
-   procedure Init;
+  task TC_Relay;
 
-end GS_TM;
+end GS_Relay_TC;

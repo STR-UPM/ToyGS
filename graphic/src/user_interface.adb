@@ -1,13 +1,36 @@
 ------------------------------------------------------------------------------
--- $Id: gs.adb 86 2017-05-04 14:09:17Z jpuente $
-------------------------------------------------------------------------------
--- Project GS - toy ground station
--- Gui_Callbacks body
--- Copyright (c) 2017 Juan Antonio de la Puente <jpuente@dit.upm.es>
--- Permission to copy and modify are granted under the terms of
--- the GNU General Public License (GPL).
--- See http://www.gnu.org/licenses/licenses.html#GPL for the details
-------------------------------------------------------------------------------
+--                                                                          --
+--          Copyright (C) 2017, Universidad Politécnica de Madrid           --
+--                                                                          --
+--  Redistribution and use in source and binary forms, with or without      --
+--  modification, are permitted provided that the following conditions are  --
+--  met:                                                                    --
+--     1. Redistributions of source code must retain the above copyright    --
+--        notice, this list of conditions and the following disclaimer.     --
+--     2. Redistributions in binary form must reproduce the above copyright --
+--        notice, this list of conditions and the following disclaimer in   --
+--        the documentation and/or other materials provided with the        --
+--        distribution.                                                     --
+--     3. Neither the name of the copyright holder nor the names of its     --
+--        contributors may be used to endorse or promote products derived   --
+--        from this software without specific prior written permission.     --
+--                                                                          --
+--   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS    --
+--   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT      --
+--   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR  --
+--   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT   --
+--   HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, --
+--   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT       --
+--   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,  --
+--   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY  --
+--   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT    --
+--   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE  --
+--   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.   --
+--                                                                          --
+-------------------------------------------------------------------------------
+
+-- Implementation of the user interface using GTK
+
 with Gdk.Threads;
 with Gtk.Main;
 with Gtk.Window;          use Gtk.Window;
@@ -21,13 +44,16 @@ with Gtk.Text_Iter;       use Gtk.Text_Iter;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Widget;          use Gtk.Widget;
 
-with GS_TC;
-with System.IO;
+with TC_Sender;
 
-package body GUI is
+pragma Warnings(Off);
+with System.IO;
+pragma Warnings(On);
+
+package body User_Interface is
 
    ----------------------
-   -- Graphich objects --
+   -- Graphic objects --
    ----------------------
 
    Window      : Gtk_Window;
@@ -52,7 +78,7 @@ package body GUI is
    -- send a TC message
    procedure button_clicked(Self : access Gtk_Button_Record'Class) is
    begin
-      GS_TC.Send;
+      TC_Sender.Send;
    end button_clicked;
 
    ----------
@@ -136,4 +162,4 @@ package body GUI is
       Gdk.Threads.Leave;
    end Put_TM;
 
-end GUI;
+end User_Interface;

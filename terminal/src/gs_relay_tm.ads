@@ -1,24 +1,17 @@
+-- $Id: gs_relay_tm.ads 99 2017-05-25 14:12:55Z jpuente $
 ------------------------------------------------------------------------------
--- $Id: gs_tm.ads 86 2017-05-04 14:09:17Z jpuente $
-------------------------------------------------------------------------------
--- Project GS
--- GS_TC specification
+-- Project GS - toy ground station
+-- GS- relay TM packets
 -- Copyright (c) 2017 Juan Antonio de la Puente <jpuente@dit.upm.es>
 -- Permission to copy and modify are granted under the terms of
 -- the GNU General Public License (GPL).
 -- See http://www.gnu.org/licenses/licenses.html#GPL for the details
 ------------------------------------------------------------------------------
 
--- Telecommand subsystem
-package GS_TC is
+-- Relay TM packets
+--
+package GS_Relay_TM is
 
-   -- Telecommands
-   type TC_Type is (HK);
+   task TM_Relay;
 
-   -- Send Telecommand
-   procedure Send (TC : TC_Type := HK);
-
-   -- Initialize TC subsystem
-   procedure Init;
-
-end GS_TC;
+end GS_Relay_TM;
