@@ -39,6 +39,9 @@ with Ada.Streams;             use Ada.Streams;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Unchecked_Conversion;
 
+with Ada.Calendar;
+with GNAT.Calendar.Time_IO;  use GNAT.Calendar.Time_IO;
+
 pragma Warnings(Off);
 with System.IO;               -- for debugging purposes
 pragma Warnings(On);
@@ -84,8 +87,9 @@ package body TC_Sender is
          Last    : Ada.Streams.Stream_Element_Offset;
       begin
          Send_Socket(Socket, Stream, Last, OBSW_Address);
-         pragma Debug
-           (System.IO.Put_Line("TC " & SC'Img & " : " & TC'Img));
+--           pragma Debug
+--             (System.IO.Put_Line(Image(Ada.Calendar.Clock, "%T ")
+--              & "TC " & SC'Img & " " & TC'Img));
       end;
    end Send;
 

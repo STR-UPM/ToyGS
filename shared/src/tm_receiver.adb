@@ -96,7 +96,7 @@ package body TM_Receiver is
 --        pragma Debug(System.IO.Put_Line("TM receiver task started"));
       loop
          Receive_Socket (Socket, Data, Last, From);
-         pragma Debug(System.IO.Put_Line("Received from " & Image(From)));
+--           pragma Debug(System.IO.Put_Line("Received from " & Image(From)));
          declare
             Message : TM_Message :=  To_TM_Message(Data);
             SC      : Seconds_Count;
@@ -107,25 +107,25 @@ package body TM_Receiver is
                when Basic =>
                   M := Message.Data;
                   Split(M.Timestamp, SC, TS);
-                  pragma Debug
-                    (System.IO.Put_Line("TM " & SC'Img & " " & M.Value'Img));
+--                    pragma Debug
+--                      (System.IO.Put_Line("TM " & SC'Img & " " & M.Value'Img));
                   User_Interface.Put_TM(Image(Clock, "%T ")
                              & "TM " & SC'Img & " "
                              & M.Value'Img);
                when Housekeeping =>
                   Split(Message.Timestamp, SC, TS);
-                  pragma Debug
-                    (System.IO.Put_Line("TM "& SC'Img & "  HK log"));
+--                    pragma Debug
+--                      (System.IO.Put_Line("TM "& SC'Img & "  HK log"));
                   User_Interface.Put_TM(Image(Clock, "%T ")
                              & "TM " & SC'Img & " "
-                             & "  HK log");
+                             & " HK log");
                   for i in 1..Message.Length loop
                      M := Message.Data_Log(i);
                      Split(M.Timestamp, SC, TS);
-                     pragma Debug
-                       (System.IO.Put_Line("            "
-                        & SC'Img & " " & M.Value'Img));
-                     User_Interface.Put_TM("                  "
+--                       pragma Debug
+--                         (System.IO.Put_Line("            "
+--                          & SC'Img & " " & M.Value'Img));
+                     User_Interface.Put_TM("            "
                                 & SC'Img & " " & M.Value'Img);
                   end loop;
             end case;

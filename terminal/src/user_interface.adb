@@ -32,17 +32,59 @@
 -- User interface implementation
 -- Terminal version
 
+with TC_Sender;               use TC_Sender;
+
+with Ada.Text_IO;             use Ada.Text_IO;
+
+with Ada.Characters.Handling; use Ada.Characters.Handling;
+
+with System;
+
 package body User_Interface is
+
+   task Command_Listener
+     with Priority => System.Default_Priority;
+   -- waits for the user to type a 'C' and then
+   -- generates a TC and send it to the OBSW
+
+   ----------
+   -- Init --
+   ----------
 
    procedure Init is
    begin
+      -- nothing to do
       null;
    end Init;
 
+   ------------
+   -- Put_TM --
+   ------------
 
    procedure Put_TM (Message : String) is
    begin
-      null;
+      Put_Line(Message);
    end Put_TM;
+
+   ----------------------
+   -- Command listener --
+   ----------------------
+
+   task body Command_Listener is
+      C : Character;
+   begin
+      pragma Debug(Put_Line("Command listener started"));
+      loop
+         delay 1.0; -- allow for some free time
+         Get_Immediate(C);
+         C := To_Upper(C);
+         case C is
+            when 'C' =>
+               Send(HK);
+            when others =>
+               null;
+         end case;
+      end loop;
+   end Command_Listener;
 
 end User_Interface;
