@@ -29,24 +29,29 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with GS_TM; pragma Unreferenced (GS_TM);
---  The GS_TM package contais the telemetry reception subsystem.
+--  Main procedure of toy ground station system - text terminal version
 
-with GS_TC; pragma Unreferenced (GS_TC);
---  The GS_TM package contais the telecommand generation subsystem.
+with TM_Receiver;
+-- TheTM_Receiver package contains the telemetry reception subsystem
 
---  Although these packages are not referenced directly in the main procedure,
---  we need them in the closure of the context clauses so that
---  they will be included in the executable.
+with TC_Sender;
+-- The GS_TC package contains the telecommand transmission subsystem
 
-with System;
+with User_Interface;              use User_Interface;
+-- Graphic usser interface - based on gtkada
+
+pragma Warnings(Off);
+with System.IO;        -- for debugging purposes
+pragma Warnings(On);
 
 procedure GS is
-   pragma Priority (System.Priority'First);
 begin
-   -- do nothing while application tasks run
-   loop
-      null;
-   end loop;
+   pragma Debug(System.IO.Put_Line("--- GS start ---"));
+
+   -- initialize components
+   TM_Receiver.Init;
+   TC_Sender.Init;
+   User_Interface.Init;
+
 end GS;
 

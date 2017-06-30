@@ -27,38 +27,22 @@
 --   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE  --
 --   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.   --
 --                                                                          --
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
---  Telemetry reception at the ground station.
---  A TM receiver task listens on an IP port for TM messages
---  sent from the OBDH system.
+-- User interface implementation
+-- Terminal version
 
-with Measurements;  use Measurements;
+package body User_Interface is
 
-with Ada.Real_Time; use Ada.Real_Time;
+   procedure Init is
+   begin
+      null;
+   end Init;
 
-with System;
 
-package GS_TM is
+   procedure Put_TM (Message : String) is
+   begin
+      null;
+   end Put_TM;
 
-   type TM_Type is (Basic, HK);
-
-   type TM_Message (Kind : TM_Type) is
-      record
-         Timestamp : Time;
-         case Kind is
-            when Basic =>
-               Data      : Measurement;
-            when HK =>
-               Data_Log  : HK_Data;
-               Length    : Positive;
-         end case;
-      end record;
-
-private
-
-   task TM_Receiver_Task
-     with Priority =>  System.Default_Priority;
-   -- replace with DMS priority when available;
-
-end GS_TM;
+end User_Interface;

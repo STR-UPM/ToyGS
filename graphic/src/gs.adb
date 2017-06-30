@@ -32,7 +32,7 @@
 --  Main procedure of toy ground station system - graphic interface version
 
 with TM_Receiver;
--- The GS_TM package contains the telemetry reception subsystem
+-- TheTM_Receiver package contains the telemetry reception subsystem
 
 with TC_Sender;
 -- The GS_TC package contains the telecommand transmission subsystem
