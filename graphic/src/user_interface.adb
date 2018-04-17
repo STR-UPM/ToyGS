@@ -43,6 +43,7 @@ with Gtk.Text_Buffer;     use Gtk.Text_Buffer;
 with Gtk.Text_Iter;       use Gtk.Text_Iter;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Widget;          use Gtk.Widget;
+with Pango.Font;          use Pango.Font;
 
 with TC_Sender;
 
@@ -98,17 +99,6 @@ package body User_Interface is
       Window.Set_Title("Toy Satellite Ground Station");
       Window.Set_Border_Width (10);
       Window.Set_Resizable (False);
-      declare
-         LOADING_ERROR : Exception;
-      begin
-         if not Window.Set_Icon_From_File("upmsat2.png") then
-            raise LOADING_ERROR;
-         end if;
-      exception
-         when LOADING_ERROR =>
-            System.IO.Put_line("UPMSat2 icon not found");
-      end;
-
       Window.On_Destroy (main_quit'Access);
 
       -- grid for placing widgets
@@ -117,24 +107,25 @@ package body User_Interface is
 
       -- TM area
       Gtk_New(Label, "Telemetry");
-      Grid.Attach(Label, 0, 0, 2, 1);
+      Grid.Attach(Label, 0, 0, 3, 1);
 
       Gtk_New(Text_Buffer);
       Gtk_New(Text, Text_Buffer);
       Text.Set_Editable(False);
+      Text.Modify_Font(From_String("Menlo 14"));
 
       Gtk_New(Scrolled);
       Scrolled.Set_Policy(Policy_Automatic, Policy_Automatic);
-      Scrolled.Set_Size_Request(40,200);
+      Scrolled.Set_Size_Request(60,400);
       Scrolled.Add(Text);
-      Grid.Attach(Scrolled, 0,1,2,8);
+      Grid.Attach(Scrolled, 0,1,3,12);
 
       -- TC area
       Gtk_New(Label, "Telecommands");
-      Grid.Attach(Label, 2, 0, 1, 1);
+      Grid.Attach(Label, 3, 0, 1, 1);
       Gtk_New(Button, "Request HK");
       Button.On_Clicked(button_clicked'Access);
-      Grid.Attach(Button, 2,1,1,1);
+      Grid.Attach(Button, 3,1,1,1);
 
       -- show window
       Grid.Set_Column_Homogeneous(True);
@@ -143,10 +134,9 @@ package body User_Interface is
       Window.Show_All;
 
       -- GTK main loop
-      --Gdk.Threads.Enter;
+      Gdk.Threads.Enter;
       Gtk.Main.Main;
-      --Gdk.Threads.Leave;
-
+      Gdk.Threads.Leave;
    end Init;
 
    ------------
@@ -156,7 +146,7 @@ package body User_Interface is
    procedure Put_TM (Message : String) is
    begin
       Gdk.Threads.Enter;
-      Text_Buffer.Insert_At_Cursor(Message & ASCII.LF);
+      Text_Buffer.Insert_At_Cursor(" " & Message & ASCII.LF);
       Text.Scroll_Mark_Onscreen(Text_Buffer.Get_Insert);
       Text.Show;
       Gdk.Threads.Leave;

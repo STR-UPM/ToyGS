@@ -42,7 +42,7 @@ package IP is
    TM_Port   : Port_Type := 8485;
 
    -- Remote port to which TC messages are sent
-   OBSW_IP   : Inet_Addr_Type := Inet_Addr("127.0.0.1");
+   OBSW_IP   : Inet_Addr_Type := Inet_Addr("192.168.4.1");
    OBSW_Port : Port_Type      := 8484;
 
 end IP;

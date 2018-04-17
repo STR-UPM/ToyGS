@@ -93,10 +93,11 @@ package body TM_Receiver is
       Last    : Ada.Streams.Stream_Element_Offset;
 
    begin
---        pragma Debug(System.IO.Put_Line("TM receiver task started"));
+      delay 1.0;
+      pragma Debug(System.IO.Put_Line("TM receiver task started"));
       loop
          Receive_Socket (Socket, Data, Last, From);
---           pragma Debug(System.IO.Put_Line("Received from " & Image(From)));
+         -- pragma Debug(System.IO.Put_Line("Received from " & Image(From)));
          declare
             Message : TM_Message :=  To_TM_Message(Data);
             SC      : Seconds_Count;
