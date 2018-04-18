@@ -32,4 +32,4 @@ After these steps `gtkada` should be installed in your system. You can now clone
 GTK_LIBS_GPR='... "-Wl,-Wl,-framework", "-Wl,-Wl,CoreFoundation", ...'
 ```
 
-If you find such an error, you can just edit `shared.gpr` with any text editor and remove the duplicates, which fixes the error.
+If you find such an error, apply the patch https://github.com/AdaCore/gtkada/pull/12/files before invoking `configure`.
