@@ -26,7 +26,7 @@ Two `gpr` project files are included, one for terminal-based user interface and 
 
 After these steps `gtkada` should be installed in your system. You can now clone this repository and open the `graphic_gs.gpr` project in GPS. You should edit the `src/ip.ads` file to set the ip address of the companion tiny OBDH system, and then build and run the program. 
 
-**NOTE**: There is bug in some source `gtkada` versions by which the `configure` script generates a duplicate option in the file named `shared.gpr` which causes `make` to fail. The offending line in `shared.gpr` is:
+**NOTE**: There is a bug in some source `gtkada` versions by which the `configure` script generates a duplicate option in the file named `shared.gpr` which causes `make` to fail. The offending line in `shared.gpr` is:
 
 ```sh
 GTK_LIBS_GPR='... "-Wl,-Wl,-framework", "-Wl,-Wl,CoreFoundation", ...'
